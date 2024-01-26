@@ -8,7 +8,8 @@ makedocs(modules = [AdvChemStat],
     pages = [
         "Home" => "index.md",
         "SVD" => "svd.md",
-        "HCA" => "HCA.md"
+        "HCA" => "HCA.md",
+        "K-Means" => "KMeans.md"
         ]
     )
 

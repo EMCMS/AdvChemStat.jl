@@ -23,7 +23,7 @@ using HDF5
 using JLD
 
 
-include("ACS_Extra_Fun.jl")
+include("ACS_Extra_fun.jl")
 include("Curve_Res.jl")
 
 export dataset, plot, plot!, scatter, scatter!, xlabel!, ylabel!, title!, @sk_import, eigvals, eigvecs, transpose, svd, diagm,
