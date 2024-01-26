@@ -9,7 +9,8 @@ makedocs(modules = [AdvChemStat],
         "Home" => "index.md",
         "SVD" => "svd.md",
         "HCA" => "HCA.md",
-        "K-Means" => "KMeans.md"
+        "K-Means" => "KMeans.md",
+        "Bayesian Statistics" => "Bayes.md"
         ]
     )
 

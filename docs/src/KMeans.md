@@ -181,7 +181,7 @@ It should be noted that the julia implementation of **k-means** algorithm does n
 
 Through **AdvChemStat.jl** package you can also use the python implementation of **k-means** via **scikit-learn**. In this case there is no need for transposing your data. Thus you can use your data as it is (i.e. columns for variables and rows for the measurements). The algorithm outputs a python object containing the coordinates of the centroids and the assigned cluster to each point. Here is an example for our *data_s*.
 
-```@example km
+```julia 
 using AdvChemStat
 
 @sk_import cluster: KMeans
