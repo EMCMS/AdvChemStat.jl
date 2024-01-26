@@ -323,7 +323,7 @@ Let's plot our results for the first two **SVs**, as we did before. However, thi
 As it can be seen, this model is very similar to our previous model based on the full dataset. Now we need to first define thresholds for each class based on the score values in the ``U1`` and ``U2`` space. This is typically more difficult to assess. However, for this case the main separating factor is the ``U2`` values (e.g. ``U2 \geq 0.05 = Setosa``). 
 
 
-```@example iris
+```julia
 
  scatter(U[:,1],U[:,2],label=["Setosa" "Versicolor" "Virginica"], group = Y_tr)
  plot!([-0.15,0],[0.05,0.05],label="Setosa")
@@ -350,7 +350,7 @@ In practice:
 
 
 ```
-```@example iris
+```julia
 
  scatter(U[:,1],U[:,2],label=["Setosa" "Versicolor" "Virginica"], group = Y_tr)
  plot!([-0.15,0],[0.05,0.05],label="Setosa")

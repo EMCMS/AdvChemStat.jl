@@ -17,14 +17,14 @@ X = vcat(cx1[:],cx2[:])     # building the matrix X
 scatter(cx1,c1,label = &quot;Cluster 1&quot;)
 scatter!(cx2,c2,label = &quot;Cluster 2&quot;)
 xlabel!(&quot;X&quot;)
-ylabel!(&quot;Y&quot;)</code></pre><img src="441a0928.svg" alt="Example block output"/><p>We first plot the data in the one dimensional data. In other words, we are setting the y values to zero in our data matrix. Below you can see how this is done.</p><pre><code class="language-julia hljs">using AdvChemStat
+ylabel!(&quot;Y&quot;)</code></pre><img src="e20a610f.svg" alt="Example block output"/><p>We first plot the data in the one dimensional data. In other words, we are setting the y values to zero in our data matrix. Below you can see how this is done.</p><pre><code class="language-julia hljs">using AdvChemStat
 
 # Plotting the data
 
 scatter(X,zeros(length(X[:])),label = &quot;Data&quot;)
 
 xlabel!(&quot;X&quot;)
-ylabel!(&quot;Y&quot;)</code></pre><img src="c9f4b683.svg" alt="Example block output"/><p>The next step is to calculate the distances in the x domain. For that we are using the Euclidean distances. Here we need to calculate the distance between each point in the <em>X</em> and all the other values in the same matrix. This implies that we will end up with a square distance matrix (i.e. <em>dist</em>). The <em>dist</em> matrix has a zero diagonal, given that the values on the diagonal represent the distance between each point and itself. Also it is important to note that we are interested only in the magnitude of the distance but not its direction. Thus, you can use the <a href="https://docs.julialang.org/en/v1/base/math/#Base.abs"><em>abs.(-)</em></a> to convert all the distances to their absolute values. Below you can see an example of a function for these calculations.</p><pre><code class="language-julia hljs">using AdvChemStat
+ylabel!(&quot;Y&quot;)</code></pre><img src="fa92e5de.svg" alt="Example block output"/><p>The next step is to calculate the distances in the x domain. For that we are using the Euclidean distances. Here we need to calculate the distance between each point in the <em>X</em> and all the other values in the same matrix. This implies that we will end up with a square distance matrix (i.e. <em>dist</em>). The <em>dist</em> matrix has a zero diagonal, given that the values on the diagonal represent the distance between each point and itself. Also it is important to note that we are interested only in the magnitude of the distance but not its direction. Thus, you can use the <a href="https://docs.julialang.org/en/v1/base/math/#Base.abs"><em>abs.(-)</em></a> to convert all the distances to their absolute values. Below you can see an example of a function for these calculations.</p><pre><code class="language-julia hljs">using AdvChemStat
 
 function dist_calc(data)
 
@@ -41,54 +41,54 @@ function dist_calc(data)
 end
 
 dist = dist_calc(X)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">10×10 Matrix{Float64}:
- 0.0        0.0424721  0.0250211  0.279062  …  2.98956    3.93602   3.44011
- 0.0424721  0.0        0.0174509  0.23659      3.03203    3.9785    3.48258
- 0.0250211  0.0174509  0.0        0.254041     3.01458    3.96105   3.46513
- 0.279062   0.23659    0.254041   0.0          3.26862    4.21509   3.71917
- 0.265267   0.307739   0.290288   0.544329     2.72429    3.67076   3.17484
- 4.11709    4.15956    4.14211    4.39615   …  1.12753    0.181065  0.67698
- 2.91753    2.96001    2.94255    3.1966       0.0720218  1.01849   0.522576
- 2.98956    3.03203    3.01458    3.26862      0.0        0.946469  0.450554
- 3.93602    3.9785     3.96105    4.21509      0.946469   0.0       0.495914
- 3.44011    3.48258    3.46513    3.71917      0.450554   0.495914  0.0</code></pre><p>In the next step we need to find the points in the <em>X</em> that have the smallest distance and should be grouped together as the first cluster. To do so we need to use the <em>dist</em> matrix. However, as you see in the <em>dist</em> matrix the smallest values are zero and are found in the diagonal. A way to deal with this is to set the diagonal to for example to <em>Inf</em>. </p><pre><code class="language-julia hljs">using AdvChemStat
+ 0.0       0.159524   0.244221   …  2.55732    2.48674    3.84023
+ 0.159524  0.0        0.0846968     2.71685    2.64626    3.99975
+ 0.244221  0.0846968  0.0           2.80154    2.73096    4.08445
+ 0.576691  0.417167   0.33247       3.13401    3.06343    4.41692
+ 0.481142  0.321618   0.236921      3.03846    2.96788    4.32137
+ 3.49401   3.65353    3.73823    …  0.936684   1.00726    0.346221
+ 3.7492    3.90872    3.99342       1.19187    1.26246    0.0910313
+ 2.55732   2.71685    2.80154       0.0        0.0705809  1.28291
+ 2.48674   2.64626    2.73096       0.0705809  0.0        1.35349
+ 3.84023   3.99975    4.08445       1.28291    1.35349    0.0</code></pre><p>In the next step we need to find the points in the <em>X</em> that have the smallest distance and should be grouped together as the first cluster. To do so we need to use the <em>dist</em> matrix. However, as you see in the <em>dist</em> matrix the smallest values are zero and are found in the diagonal. A way to deal with this is to set the diagonal to for example to <em>Inf</em>. </p><pre><code class="language-julia hljs">using AdvChemStat
 
 #dist = dist_calc(X)
 dist[diagind(dist)] .= Inf                   # Set the diagonal to inf, which is very helpful when searching for minimum distance
 dist</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">10×10 Matrix{Float64}:
- Inf          0.0424721   0.0250211  …   2.98956     3.93602    3.44011
-  0.0424721  Inf          0.0174509      3.03203     3.9785     3.48258
-  0.0250211   0.0174509  Inf             3.01458     3.96105    3.46513
-  0.279062    0.23659     0.254041       3.26862     4.21509    3.71917
-  0.265267    0.307739    0.290288       2.72429     3.67076    3.17484
-  4.11709     4.15956     4.14211    …   1.12753     0.181065   0.67698
-  2.91753     2.96001     2.94255        0.0720218   1.01849    0.522576
-  2.98956     3.03203     3.01458       Inf          0.946469   0.450554
-  3.93602     3.9785      3.96105        0.946469   Inf         0.495914
-  3.44011     3.48258     3.46513        0.450554    0.495914  Inf</code></pre><p>Now that we have the complete distances matrix, we can use the function <a href="https://docs.julialang.org/en/v1/base/collections/#Base.argmin"><em>argmin(-)</em></a> to find the coordinates of the points with the minimum distance in the <em>X</em>. </p><pre><code class="language-julia hljs">using AdvChemStat
+ Inf         0.159524    0.244221   …   2.55732     2.48674     3.84023
+  0.159524  Inf          0.0846968      2.71685     2.64626     3.99975
+  0.244221   0.0846968  Inf             2.80154     2.73096     4.08445
+  0.576691   0.417167    0.33247        3.13401     3.06343     4.41692
+  0.481142   0.321618    0.236921       3.03846     2.96788     4.32137
+  3.49401    3.65353     3.73823    …   0.936684    1.00726     0.346221
+  3.7492     3.90872     3.99342        1.19187     1.26246     0.0910313
+  2.55732    2.71685     2.80154       Inf          0.0705809   1.28291
+  2.48674    2.64626     2.73096        0.0705809  Inf          1.35349
+  3.84023    3.99975     4.08445        1.28291     1.35349    Inf</code></pre><p>Now that we have the complete distances matrix, we can use the function <a href="https://docs.julialang.org/en/v1/base/collections/#Base.argmin"><em>argmin(-)</em></a> to find the coordinates of the points with the minimum distance in the <em>X</em>. </p><pre><code class="language-julia hljs">using AdvChemStat
 
-cl_temp = argmin(dist)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">CartesianIndex(3, 2)</code></pre><p>The selected points in the <em>X</em> are the closest to each other, indicating that they should be grouped into one cluster. In the next step, we will assume this cluster as a single point and thus we can repeat the distance calculations. For simplicity, we assume that the average of the two points is representative of that cluster. This process is called <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering#Linkage_criteria">linkage</a> and can be done using different approaches. Using the mean, in particular, is called centroid linkage. With centroid method, we are replacing these points with their average. This process can be repeated until all data points are grouped into one single cluster.</p><pre><code class="language-julia hljs">using AdvChemStat
+cl_temp = argmin(dist)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">CartesianIndex(9, 8)</code></pre><p>The selected points in the <em>X</em> are the closest to each other, indicating that they should be grouped into one cluster. In the next step, we will assume this cluster as a single point and thus we can repeat the distance calculations. For simplicity, we assume that the average of the two points is representative of that cluster. This process is called <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering#Linkage_criteria">linkage</a> and can be done using different approaches. Using the mean, in particular, is called centroid linkage. With centroid method, we are replacing these points with their average. This process can be repeated until all data points are grouped into one single cluster.</p><pre><code class="language-julia hljs">using AdvChemStat
 
 X1 = deepcopy(X)
 X1[cl_temp[1]] = mean([X[cl_temp[1]],X[cl_temp[2]]])
 X1[cl_temp[2]] = mean([X[cl_temp[1]],X[cl_temp[2]]])
 
 [X,X1]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">2-element Vector{Vector{Float64}}:
- [1.715918204035826, 1.6734461371425948, 1.6908970844898277, 1.4368560419301086, 1.9811851179573454, 5.833007742758756, 4.633451814313682, 4.7054736494318306, 5.651942255511976, 5.156028119768909]
- [1.715918204035826, 1.6821716108162112, 1.6821716108162112, 1.4368560419301086, 1.9811851179573454, 5.833007742758756, 4.633451814313682, 4.7054736494318306, 5.651942255511976, 5.156028119768909]</code></pre><pre><code class="language-julia hljs">using AdvChemStat
+ [1.6937036883518137, 1.5341799347612988, 1.4494831455892112, 1.1170127204901972, 1.212561839187948, 5.187709092178345, 5.442899246681158, 4.251025042756716, 4.1804441128713865, 5.533930556297298]
+ [1.6937036883518137, 1.5341799347612988, 1.4494831455892112, 1.1170127204901972, 1.212561839187948, 5.187709092178345, 5.442899246681158, 4.215734577814051, 4.215734577814051, 5.533930556297298]</code></pre><pre><code class="language-julia hljs">using AdvChemStat
 
 
 scatter(X,zeros(length(X[:])),label = &quot;Original data&quot;)
 scatter!(X1,0.01 .* ones(length(X1[:])),label = &quot;Data after clustering&quot;,fillalpha = 0.5)
 ylims!(-0.01,0.1)
 xlabel!(&quot;X&quot;)
-ylabel!(&quot;Y&quot;)</code></pre><img src="1993e7f4.svg" alt="Example block output"/><p>So far, we have done all our calculations based on one dimensional data. Now we can move towards two and more dimension. One of the main things to consider when increasing the number of dimensions is the distance calculations. In the above examples, we have use the <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>, which is one of many <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering#Similarity_metric">distance metrics</a>. In general terms the Euclidean distance can be expressed as below, where <span>$d_{m,n}$</span> represents the distance between points <em>m</em> and <em>n</em>. This is based on the <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Pythagorean distance</a>. </p><p class="math-container">\[d_{m,n} = \sqrt{\sum{(x_{m} - x_{n})^{2}}}.
+ylabel!(&quot;Y&quot;)</code></pre><img src="b57d5c1a.svg" alt="Example block output"/><p>So far, we have done all our calculations based on one dimensional data. Now we can move towards two and more dimension. One of the main things to consider when increasing the number of dimensions is the distance calculations. In the above examples, we have use the <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>, which is one of many <a href="https://en.wikipedia.org/wiki/Hierarchical_clustering#Similarity_metric">distance metrics</a>. In general terms the Euclidean distance can be expressed as below, where <span>$d_{m,n}$</span> represents the distance between points <em>m</em> and <em>n</em>. This is based on the <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Pythagorean distance</a>. </p><p class="math-container">\[d_{m,n} = \sqrt{\sum{(x_{m} - x_{n})^{2}}}.
 \]</p><p>Let&#39;s try to move to a two dimensional space rather than uni-dimensional one. </p><pre><code class="language-julia hljs">using AdvChemStat
 
 # Plotting the data
 scatter(cx1,c1,label = &quot;Cluster 1&quot;)
 scatter!(cx2,c2,label = &quot;Cluster 2&quot;)
 xlabel!(&quot;X&quot;)
-ylabel!(&quot;Y&quot;)</code></pre><img src="9583f6e9.svg" alt="Example block output"/><p>The very first step to do so is to convert our 1D distances to 2D ones, using the below equation. If we replace the <span>$dist[j,i] = data[j,1] - data[i,1]$</span> with the below equation in our distance function, we will be able to generate the distance matrix for our two dimensional dataset. </p><p class="math-container">\[d_{m,n} = \sqrt{(x_{m} - x_{n})^{2} + (y_{m} - y_{n})^{2}}.
+ylabel!(&quot;Y&quot;)</code></pre><img src="03a7bace.svg" alt="Example block output"/><p>The very first step to do so is to convert our 1D distances to 2D ones, using the below equation. If we replace the <span>$dist[j,i] = data[j,1] - data[i,1]$</span> with the below equation in our distance function, we will be able to generate the distance matrix for our two dimensional dataset. </p><p class="math-container">\[d_{m,n} = \sqrt{(x_{m} - x_{n})^{2} + (y_{m} - y_{n})^{2}}.
 \]</p><pre><code class="language-julia hljs">using AdvChemStat
 
 function dist_calc(data)
@@ -110,16 +110,16 @@ data = hcat(X,Y)								# To generate the DATA matrix
 dist = dist_calc(data) 							# Calculating the distance matrix
 dist[diagind(dist)] .= Inf                   # Set the diagonal to inf, which is very helpful when searching for minimum distance
 dist</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">10×10 Matrix{Float64}:
- Inf         2.5812    0.575947   0.591276  …   9.14053   4.0864    4.80112
-  2.5812    Inf        3.1563     2.07311       6.77348   4.24573   3.56631
-  0.575947   3.1563   Inf         1.12572       9.69387   4.30015   5.23534
-  0.591276   2.07311   1.12572   Inf            8.74997   4.2544    4.67213
-  0.289112   2.71333   0.544299   0.837326      9.16696   3.86608   4.69887
-  5.38902    4.25505   5.79491    5.29753   …   5.28233   2.38577   0.689
-  5.34666    3.51714   5.84984    5.08857       4.15795   3.53217   1.24625
-  9.14053    6.77348   9.69387    8.74997      Inf        7.59865   5.30788
-  4.0864     4.24573   4.30015    4.2544        7.59865  Inf        2.30474
-  4.80112    3.56631   5.23534    4.67213       5.30788   2.30474  Inf</code></pre><pre><code class="language-julia hljs">using AdvChemStat
+ Inf        1.06855   1.73971    2.40615   …   2.56264   2.98232   4.62979
+  1.06855  Inf        2.78035    3.41815       2.85937   3.78263   4.2822
+  1.73971   2.78035  Inf         0.69783       3.3781    2.73202   5.93684
+  2.40615   3.41815   0.69783   Inf            4.00968   3.14011   6.61331
+  1.64252   2.64666   0.281496   0.771494      3.4992    2.96885   5.9959
+  5.57507   4.91505   7.12606    7.82291   …   4.28294   6.07475   1.79207
+  4.21438   4.91591   3.99853    4.3454        2.40578   1.29279   4.51167
+  2.56264   2.85937   3.3781     4.00968      Inf        1.81277   2.73987
+  2.98232   3.78263   2.73202    3.14011       1.81277  Inf        4.4435
+  4.62979   4.2822    5.93684    6.61331       2.73987   4.4435   Inf</code></pre><pre><code class="language-julia hljs">using AdvChemStat
 
 cl_temp = argmin(dist)
 
@@ -131,53 +131,53 @@ data1[cl_temp[2],1] = mean([data[cl_temp[1],1],data[cl_temp[2],1]])
 data1[cl_temp[2],2] = mean([data[cl_temp[1],2],data[cl_temp[2],2]])
 
 data1</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">10×2 Matrix{Float64}:
- 1.84855  1.18555
- 1.67345  3.82389
- 1.6909   0.667633
- 1.43686  1.76432
- 1.84855  1.18555
- 5.83301  4.72027
- 4.63345  5.72352
- 4.70547  9.88085
- 5.65194  2.34138
- 5.15603  4.59213</code></pre><pre><code class="language-julia hljs">using AdvChemStat
+ 1.6937   2.78373
+ 1.53418  3.8403
+ 1.33102  1.13725
+ 1.11701  0.447703
+ 1.33102  1.13725
+ 5.18771  7.12807
+ 5.4429   0.859016
+ 4.25103  2.94881
+ 4.18044  1.13742
+ 5.53393  5.36976</code></pre><pre><code class="language-julia hljs">using AdvChemStat
 
 scatter(data[:,1],data[:,2],label = &quot;Original data&quot;)
 scatter!(data1[:,1],data1[:,2],label = &quot;Data after clustering&quot;)
 xlabel!(&quot;X&quot;)
-ylabel!(&quot;Y&quot;)</code></pre><img src="6cce43c5.svg" alt="Example block output"/><p>As it can be seen in the figure, there are two blue points and one red point in the middle of those points. These blue dots represent the two closest data points that are clustered together to form the centroid in between them. If we repeat this process multiple times, we eventually end up having all data points into one large cluster. The HCA clustering generates an array of clustered data points that can be visualized via a <a href="https://en.wikipedia.org/wiki/Dendrogram">dendrogram</a> or a <a href="https://en.wikipedia.org/wiki/Heat_map">heatmap</a>. </p><pre><code class="language-julia hljs">using AdvChemStat
+ylabel!(&quot;Y&quot;)</code></pre><img src="febc6ed8.svg" alt="Example block output"/><p>As it can be seen in the figure, there are two blue points and one red point in the middle of those points. These blue dots represent the two closest data points that are clustered together to form the centroid in between them. If we repeat this process multiple times, we eventually end up having all data points into one large cluster. The HCA clustering generates an array of clustered data points that can be visualized via a <a href="https://en.wikipedia.org/wiki/Dendrogram">dendrogram</a> or a <a href="https://en.wikipedia.org/wiki/Heat_map">heatmap</a>. </p><pre><code class="language-julia hljs">using AdvChemStat
 
 dist = dist_calc(data)
 
 hc = hclust(dist, linkage=:average)
-sp.plot(hc)</code></pre><img src="9ee89710.svg" alt="Example block output"/><h2 id="Practical-Application"><a class="docs-heading-anchor" href="#Practical-Application">Practical Application</a><a id="Practical-Application-1"></a><a class="docs-heading-anchor-permalink" href="#Practical-Application" title="Permalink"></a></h2><p>We can use either our home developed function for HCA or use the julia built-in functions. Here we will provide an easy tutorial on how to use the julia functions that are built-in the <strong>AdvChemStat.jl</strong> package. </p><p>For calculating the distances the function <em>pairwise(-)</em> via the julia package <a href="https://github.com/JuliaStats/Distances.jl"><strong>Distances.jl</strong></a> can be used. Function <em>pairwise(-)</em> has three inputs namely: 1) distance metrics, 2) data, and 3) the operation direction. This function outputs a square matrix similar to our distance matrix. As it can be seen from the distance matrix, our function and the <em>pairwise(-)</em> generate the same results, which is expected. The function <em>pairwise(-)</em> will give access to a wide variety of distance metrics that can be used for your projects. </p><pre><code class="language-julia hljs">using AdvChemStat
+sp.plot(hc)</code></pre><img src="4828a8cc.svg" alt="Example block output"/><h2 id="Practical-Application"><a class="docs-heading-anchor" href="#Practical-Application">Practical Application</a><a id="Practical-Application-1"></a><a class="docs-heading-anchor-permalink" href="#Practical-Application" title="Permalink"></a></h2><p>We can use either our home developed function for HCA or use the julia built-in functions. Here we will provide an easy tutorial on how to use the julia functions that are built-in the <strong>AdvChemStat.jl</strong> package. </p><p>For calculating the distances the function <em>pairwise(-)</em> via the julia package <a href="https://github.com/JuliaStats/Distances.jl"><strong>Distances.jl</strong></a> can be used. Function <em>pairwise(-)</em> has three inputs namely: 1) distance metrics, 2) data, and 3) the operation direction. This function outputs a square matrix similar to our distance matrix. As it can be seen from the distance matrix, our function and the <em>pairwise(-)</em> generate the same results, which is expected. The function <em>pairwise(-)</em> will give access to a wide variety of distance metrics that can be used for your projects. </p><pre><code class="language-julia hljs">using AdvChemStat
 
 dist1 = pairwise(AdvChemStat.Euclidean(), data, dims=1) # Euclidean distance
 
 # dist1 = pairwise(AdvChemStat.TotalVariation(), data, dims=1) # TotalVariation distance</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">10×10 Matrix{Float64}:
- 0.0       2.5812   0.575947  0.591276  …  5.34666  9.14053  4.0864   4.80112
- 2.5812    0.0      3.1563    2.07311      3.51714  6.77348  4.24573  3.56631
- 0.575947  3.1563   0.0       1.12572      5.84984  9.69387  4.30015  5.23534
- 0.591276  2.07311  1.12572   0.0          5.08857  8.74997  4.2544   4.67213
- 0.289112  2.71333  0.544299  0.837326     5.30592  9.16696  3.86608  4.69887
- 5.38902   4.25505  5.79491   5.29753   …  1.5638   5.28233  2.38577  0.689
- 5.34666   3.51714  5.84984   5.08857      0.0      4.15795  3.53217  1.24625
- 9.14053   6.77348  9.69387   8.74997      4.15795  0.0      7.59865  5.30788
- 4.0864    4.24573  4.30015   4.2544       3.53217  7.59865  0.0      2.30474
- 4.80112   3.56631  5.23534   4.67213      1.24625  5.30788  2.30474  0.0</code></pre><p>For the HCA itself, you can use the function <em>hclust(-)</em> incorporated in the <strong>AdvChemStat.jl</strong> package and provided via <a href="https://juliastats.org/Clustering.jl/stable/index.html"><strong>Clustering.jl</strong></a> package. This function takes two inputs, the distance matrix and the linkage method. The output of this function is a structure with four <a href="https://juliastats.org/Clustering.jl/stable/hclust.html#Clustering.Hclust">outputs</a>. The two most important outputs are <em>merges</em> and <em>order</em>. The combination of all four outputs can be plotted via <em>sp.plot(-)</em> function. </p><pre><code class="language-julia hljs">using AdvChemStat
+ 0.0      1.06855  1.73971   2.40615   …  4.21438  2.56264  2.98232  4.62979
+ 1.06855  0.0      2.78035   3.41815      4.91591  2.85937  3.78263  4.2822
+ 1.73971  2.78035  0.0       0.69783      3.99853  3.3781   2.73202  5.93684
+ 2.40615  3.41815  0.69783   0.0          4.3454   4.00968  3.14011  6.61331
+ 1.64252  2.64666  0.281496  0.771494     4.24514  3.4992   2.96885  5.9959
+ 5.57507  4.91505  7.12606   7.82291   …  6.27425  4.28294  6.07475  1.79207
+ 4.21438  4.91591  3.99853   4.3454       0.0      2.40578  1.29279  4.51167
+ 2.56264  2.85937  3.3781    4.00968      2.40578  0.0      1.81277  2.73987
+ 2.98232  3.78263  2.73202   3.14011      1.29279  1.81277  0.0      4.4435
+ 4.62979  4.2822   5.93684   6.61331      4.51167  2.73987  4.4435   0.0</code></pre><p>For the HCA itself, you can use the function <em>hclust(-)</em> incorporated in the <strong>AdvChemStat.jl</strong> package and provided via <a href="https://juliastats.org/Clustering.jl/stable/index.html"><strong>Clustering.jl</strong></a> package. This function takes two inputs, the distance matrix and the linkage method. The output of this function is a structure with four <a href="https://juliastats.org/Clustering.jl/stable/hclust.html#Clustering.Hclust">outputs</a>. The two most important outputs are <em>merges</em> and <em>order</em>. The combination of all four outputs can be plotted via <em>sp.plot(-)</em> function. </p><pre><code class="language-julia hljs">using AdvChemStat
 
-h = hclust(dist1,:average) # Average linkage or centroids</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Clustering.Hclust{Float64}([-1 -5; -3 1; … ; 6 7; -8 8], [0.2891123048657476, 0.5601229765282485, 0.6889995219123214, 0.8514412182258116, 1.405022540407349, 2.6309869419278478, 2.7408919238499116, 4.741905745478767, 7.3190680466424975], [8, 2, 4, 3, 1, 5, 9, 7, 6, 10], :average)</code></pre><p>To access the outputs, one can do the following: </p><pre><code class="language-julia hljs">using AdvChemStat
+h = hclust(dist1,:average) # Average linkage or centroids</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Clustering.Hclust{Float64}([-3 -5; -4 1; … ; 6 7; 5 8], [0.2814964372633128, 0.7346617470059637, 1.068551982360932, 1.2927873003740393, 1.7920689536628756, 2.109275429430042, 2.4389259989907575, 3.575619879274935, 5.521911130927366], [6, 10, 8, 7, 9, 4, 3, 5, 1, 2], :average)</code></pre><p>To access the outputs, one can do the following: </p><pre><code class="language-julia hljs">using AdvChemStat
 
 h.order</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">10-element Vector{Int64}:
+  6
+ 10
   8
-  2
+  7
+  9
   4
   3
-  1
   5
-  9
-  7
-  6
- 10</code></pre><p>and to plot the outputs, we can use the below function.</p><pre><code class="language-julia hljs">using AdvChemStat
+  1
+  2</code></pre><p>and to plot the outputs, we can use the below function.</p><pre><code class="language-julia hljs">using AdvChemStat
 
-sp.plot(h)</code></pre><img src="f92ae651.svg" alt="Example block output"/><p>There are also <em>python</em> implementation of <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html">HCA</a>, that you can explore using those for your analysis. </p><h2 id="Additional-Example"><a class="docs-heading-anchor" href="#Additional-Example">Additional Example</a><a id="Additional-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Additional-Example" title="Permalink"></a></h2><p>If you are interested in practicing more, you can use the <a href="https://github.com/JuliaStats/RDatasets.jl/blob/master/doc/datasets/rst/mtcars.rst">mtcars</a> dataset via <strong>RDatasets</strong> provided in <a href="https://github.com/EMCMS/AdvChemStat.jl/tree/main/datasets">folder dataset</a> of the package <a href="https://github.com/EMCMS/AdvChemStat.jl"><em>AdvChemStat.jl</em> github repository</a>. Please note that you must exclude the car origin column. The objective here is to see whether HCA is able to cluster the cars with similar origins.  </p><p>If you are interested in additional resources regarding <strong>HCA</strong> and would like to know more you can check this <a href="https://ocw.mit.edu/courses/6-0002-introduction-to-computational-thinking-and-data-science-fall-2016/resources/lecture-12-clustering/">MIT course material</a>.  </p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../svd/">« SVD</a><a class="docs-footer-nextpage" href="../KMeans/">K-Means »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Friday 26 January 2024 18:18">Friday 26 January 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+sp.plot(h)</code></pre><img src="74206b5d.svg" alt="Example block output"/><p>There are also <em>python</em> implementation of <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html">HCA</a>, that you can explore using those for your analysis. </p><h2 id="Additional-Example"><a class="docs-heading-anchor" href="#Additional-Example">Additional Example</a><a id="Additional-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Additional-Example" title="Permalink"></a></h2><p>If you are interested in practicing more, you can use the <a href="https://github.com/JuliaStats/RDatasets.jl/blob/master/doc/datasets/rst/mtcars.rst">mtcars</a> dataset via <strong>RDatasets</strong> provided in <a href="https://github.com/EMCMS/AdvChemStat.jl/tree/main/datasets">folder dataset</a> of the package <a href="https://github.com/EMCMS/AdvChemStat.jl"><em>AdvChemStat.jl</em> github repository</a>. Please note that you must exclude the car origin column. The objective here is to see whether HCA is able to cluster the cars with similar origins.  </p><p>If you are interested in additional resources regarding <strong>HCA</strong> and would like to know more you can check this <a href="https://ocw.mit.edu/courses/6-0002-introduction-to-computational-thinking-and-data-science-fall-2016/resources/lecture-12-clustering/">MIT course material</a>.  </p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../svd/">« SVD</a><a class="docs-footer-nextpage" href="../KMeans/">K-Means »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Friday 26 January 2024 19:33">Friday 26 January 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

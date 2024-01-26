@@ -151,13 +151,13 @@ Vt factor:
  scatter!(1:length(var_exp),var_exp_cum,label=&quot;Cumulative&quot;)
  plot!(1:length(var_exp),var_exp_cum,label=false)
  xlabel!(&quot;Nr Singular Values&quot;)
- ylabel!(&quot;Variance Explained&quot;)</code></pre><img src="3e64eeae.svg" alt="Example block output"/><p>Given that the first two singular values explain more than 95% variance in the data, they are considered enough for modeling our dataset. The next step here is to first plot the scores (i.e. the left singular matrix) of first and second singular values against each other to see whether we have a model or not. Each column in the <em><span>$U$</span></em> matrix represents a set of scores associated with a singular value (e.g. first column for the first singular value).</p><pre><code class="language-julia hljs"> scatter(U[:,1],U[:,2],label=false)
+ ylabel!(&quot;Variance Explained&quot;)</code></pre><img src="96483e0d.svg" alt="Example block output"/><p>Given that the first two singular values explain more than 95% variance in the data, they are considered enough for modeling our dataset. The next step here is to first plot the scores (i.e. the left singular matrix) of first and second singular values against each other to see whether we have a model or not. Each column in the <em><span>$U$</span></em> matrix represents a set of scores associated with a singular value (e.g. first column for the first singular value).</p><pre><code class="language-julia hljs"> scatter(U[:,1],U[:,2],label=false)
  xlabel!(&quot;First Singular value (81%)&quot;)
- ylabel!(&quot;Second Singular value (15%)&quot;)</code></pre><img src="75ec206d.svg" alt="Example block output"/><p>At this point we are assuming that we do not have any idea about the plant species included in our dataset. Now we need to connect the singular values to individual variables. For that similarly to <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a> we will take advantage of the loadings, which in this case are the columns of the <em><span>$V$</span></em> or the rows of <em><span>$V^{T}$</span></em>. </p><pre><code class="language-julia hljs"> bar(V[:,1] ./ sum(abs.(V)),label=&quot;First SV&quot;)
+ ylabel!(&quot;Second Singular value (15%)&quot;)</code></pre><img src="8f8597b4.svg" alt="Example block output"/><p>At this point we are assuming that we do not have any idea about the plant species included in our dataset. Now we need to connect the singular values to individual variables. For that similarly to <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a> we will take advantage of the loadings, which in this case are the columns of the <em><span>$V$</span></em> or the rows of <em><span>$V^{T}$</span></em>. </p><pre><code class="language-julia hljs"> bar(V[:,1] ./ sum(abs.(V)),label=&quot;First SV&quot;)
  bar!(V[:,2] ./ sum(abs.(V)),label=&quot;Second SV&quot;)
  xlabel!(&quot;Variable Nr&quot;)
  ylabel!(&quot;Importance&quot;)
- #ylims!(-0.1,0.1)</code></pre><img src="23949720.svg" alt="Example block output"/><p>The sign of each loading value shows the relationship between the variable and the model. For example, based on the first <em>SV</em> the variable number one and two both have a negative impact on the final model (i.e. scores of the <em>SV1</em>). A positive impact indicates an increase of the final model scores with the variable while a negative impact means a decrease in the score values with an increase the variable. </p><pre><code class="language-julia hljs"> p1 = scatter(X[:,1],U[:,1],label=false)
+ #ylims!(-0.1,0.1)</code></pre><img src="11257036.svg" alt="Example block output"/><p>The sign of each loading value shows the relationship between the variable and the model. For example, based on the first <em>SV</em> the variable number one and two both have a negative impact on the final model (i.e. scores of the <em>SV1</em>). A positive impact indicates an increase of the final model scores with the variable while a negative impact means a decrease in the score values with an increase the variable. </p><pre><code class="language-julia hljs"> p1 = scatter(X[:,1],U[:,1],label=false)
  xlabel!(&quot;SepalLength&quot;)
  ylabel!(&quot;Scores U1&quot;)
 
@@ -173,125 +173,131 @@ Vt factor:
  xlabel!(&quot;PetalLength&quot;)
  ylabel!(&quot;Scores U2&quot;)
 
- plot(p1,p2,p3,p4,layout = (2,2))</code></pre><img src="3084db1b.svg" alt="Example block output"/><p>In this particular case, the <em>SV1</em> is a linear combination of <em>SepalLength</em> and <em>SepalWidth</em> while the <em>SV2</em> is a linear combination of all four variables. This implies that we can cover the variance present in the <span>$X$</span> with two variables, which are <span>$U1$</span> and <span>$U2$</span>. For this dataset, we have a reduction of variables from 4 to 2, which may not look impressive. However, this can be a very useful technique when dealing with a large number of variables (the octane example).</p><h3 id="Clustering"><a class="docs-heading-anchor" href="#Clustering">Clustering</a><a id="Clustering-1"></a><a class="docs-heading-anchor-permalink" href="#Clustering" title="Permalink"></a></h3><p>When we perform cluster analysis or most modeling approaches, we need to divide our data into training and test sets. We usually go for a division of 80% for training set and 20% for the test. More details are provided in the cross-validation chapter. Let&#39;s randomly select 15 data points to put aside as the test set. </p><pre><code class="language-julia hljs">n = 15 # number of points to be selected
+ plot(p1,p2,p3,p4,layout = (2,2))</code></pre><img src="2c0a1901.svg" alt="Example block output"/><p>In this particular case, the <em>SV1</em> is a linear combination of <em>SepalLength</em> and <em>SepalWidth</em> while the <em>SV2</em> is a linear combination of all four variables. This implies that we can cover the variance present in the <span>$X$</span> with two variables, which are <span>$U1$</span> and <span>$U2$</span>. For this dataset, we have a reduction of variables from 4 to 2, which may not look impressive. However, this can be a very useful technique when dealing with a large number of variables (the octane example).</p><h3 id="Clustering"><a class="docs-heading-anchor" href="#Clustering">Clustering</a><a id="Clustering-1"></a><a class="docs-heading-anchor-permalink" href="#Clustering" title="Permalink"></a></h3><p>When we perform cluster analysis or most modeling approaches, we need to divide our data into training and test sets. We usually go for a division of 80% for training set and 20% for the test. More details are provided in the cross-validation chapter. Let&#39;s randomly select 15 data points to put aside as the test set. </p><pre><code class="language-julia hljs">n = 15 # number of points to be selected
 
 rand_ind = rand(1:size(X,1),n) # generate a set of random numbers between 1 and size(X,1)
 ind_tr = ones(size(X,1))       # generate a matrix of indices
 ind_tr[rand_ind] .= 0          # set the test set values&#39; indices to zero
 X_tr = X[ind_tr .== 1,:]       # select the training set
 X_ts = X[rand_ind,:]           # select the test set
-data[rand_ind,:]</code></pre><div><div style = "float: left;"><span>15×5 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">SepalLength</th><th style = "text-align: left;">SepalWidth</th><th style = "text-align: left;">PetalLength</th><th style = "text-align: left;">PetalWidth</th><th style = "text-align: left;">Species</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "CategoricalArrays.CategoricalValue{String, UInt8}" style = "text-align: left;">Cat…</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">6.8</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">5.5</td><td style = "text-align: right;">2.1</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">4.9</td><td style = "text-align: right;">2.5</td><td style = "text-align: right;">4.5</td><td style = "text-align: right;">1.7</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">5.0</td><td style = "text-align: right;">3.5</td><td style = "text-align: right;">1.6</td><td style = "text-align: right;">0.6</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">4</td><td style = "text-align: right;">7.6</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">6.6</td><td style = "text-align: right;">2.1</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">5</td><td style = "text-align: right;">5.0</td><td style = "text-align: right;">2.3</td><td style = "text-align: right;">3.3</td><td style = "text-align: right;">1.0</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">6</td><td style = "text-align: right;">4.4</td><td style = "text-align: right;">3.2</td><td style = "text-align: right;">1.3</td><td style = "text-align: right;">0.2</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">7</td><td style = "text-align: right;">6.5</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">5.8</td><td style = "text-align: right;">2.2</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">8</td><td style = "text-align: right;">6.4</td><td style = "text-align: right;">3.2</td><td style = "text-align: right;">4.5</td><td style = "text-align: right;">1.5</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">9</td><td style = "text-align: right;">5.0</td><td style = "text-align: right;">2.0</td><td style = "text-align: right;">3.5</td><td style = "text-align: right;">1.0</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">10</td><td style = "text-align: right;">5.9</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">4.2</td><td style = "text-align: right;">1.5</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">11</td><td style = "text-align: right;">5.4</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">4.5</td><td style = "text-align: right;">1.5</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">12</td><td style = "text-align: right;">5.8</td><td style = "text-align: right;">2.6</td><td style = "text-align: right;">4.0</td><td style = "text-align: right;">1.2</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">13</td><td style = "text-align: right;">4.8</td><td style = "text-align: right;">3.4</td><td style = "text-align: right;">1.9</td><td style = "text-align: right;">0.2</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">14</td><td style = "text-align: right;">7.7</td><td style = "text-align: right;">3.8</td><td style = "text-align: right;">6.7</td><td style = "text-align: right;">2.2</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">15</td><td style = "text-align: right;">4.5</td><td style = "text-align: right;">2.3</td><td style = "text-align: right;">1.3</td><td style = "text-align: right;">0.3</td><td style = "text-align: left;">setosa</td></tr></tbody></table></div><p>Now that we have training and test sets separated, we can build our model using the training set. This implies that the model has never seen the values in the test set. It should be noted that we always want the homogenous distribution of measurements in the test set. Also, each iteration here will result in a different test set as a new set of random numbers are generated.  Now let&#39;s build our model with only the <span>$X_{tr}$</span> following the same procedure as before. </p><pre><code class="language-julia hljs"> out = svd(X_tr)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">LinearAlgebra.SVD{Float64, Float64, Matrix{Float64}}
+data[rand_ind,:]</code></pre><div><div style = "float: left;"><span>15×5 DataFrame</span></div><div style = "clear: both;"></div></div><div class = "data-frame" style = "overflow-x: scroll;"><table class = "data-frame" style = "margin-bottom: 6px;"><thead><tr class = "header"><th class = "rowNumber" style = "font-weight: bold; text-align: right;">Row</th><th style = "text-align: left;">SepalLength</th><th style = "text-align: left;">SepalWidth</th><th style = "text-align: left;">PetalLength</th><th style = "text-align: left;">PetalWidth</th><th style = "text-align: left;">Species</th></tr><tr class = "subheader headerLastRow"><th class = "rowNumber" style = "font-weight: bold; text-align: right;"></th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "Float64" style = "text-align: left;">Float64</th><th title = "CategoricalArrays.CategoricalValue{String, UInt8}" style = "text-align: left;">Cat…</th></tr></thead><tbody><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">1</td><td style = "text-align: right;">6.4</td><td style = "text-align: right;">2.8</td><td style = "text-align: right;">5.6</td><td style = "text-align: right;">2.2</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">2</td><td style = "text-align: right;">5.5</td><td style = "text-align: right;">2.3</td><td style = "text-align: right;">4.0</td><td style = "text-align: right;">1.3</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">3</td><td style = "text-align: right;">4.8</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">1.4</td><td style = "text-align: right;">0.1</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">4</td><td style = "text-align: right;">5.5</td><td style = "text-align: right;">2.6</td><td style = "text-align: right;">4.4</td><td style = "text-align: right;">1.2</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">5</td><td style = "text-align: right;">5.1</td><td style = "text-align: right;">3.3</td><td style = "text-align: right;">1.7</td><td style = "text-align: right;">0.5</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">6</td><td style = "text-align: right;">6.8</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">5.5</td><td style = "text-align: right;">2.1</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">7</td><td style = "text-align: right;">6.9</td><td style = "text-align: right;">3.1</td><td style = "text-align: right;">5.4</td><td style = "text-align: right;">2.1</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">8</td><td style = "text-align: right;">6.1</td><td style = "text-align: right;">2.8</td><td style = "text-align: right;">4.7</td><td style = "text-align: right;">1.2</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">9</td><td style = "text-align: right;">6.5</td><td style = "text-align: right;">3.0</td><td style = "text-align: right;">5.2</td><td style = "text-align: right;">2.0</td><td style = "text-align: left;">virginica</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">10</td><td style = "text-align: right;">5.9</td><td style = "text-align: right;">3.2</td><td style = "text-align: right;">4.8</td><td style = "text-align: right;">1.8</td><td style = "text-align: left;">versicolor</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">11</td><td style = "text-align: right;">5.4</td><td style = "text-align: right;">3.9</td><td style = "text-align: right;">1.7</td><td style = "text-align: right;">0.4</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">12</td><td style = "text-align: right;">5.1</td><td style = "text-align: right;">3.5</td><td style = "text-align: right;">1.4</td><td style = "text-align: right;">0.2</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">13</td><td style = "text-align: right;">5.4</td><td style = "text-align: right;">3.9</td><td style = "text-align: right;">1.7</td><td style = "text-align: right;">0.4</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">14</td><td style = "text-align: right;">5.2</td><td style = "text-align: right;">3.5</td><td style = "text-align: right;">1.5</td><td style = "text-align: right;">0.2</td><td style = "text-align: left;">setosa</td></tr><tr><td class = "rowNumber" style = "font-weight: bold; text-align: right;">15</td><td style = "text-align: right;">5.4</td><td style = "text-align: right;">3.9</td><td style = "text-align: right;">1.3</td><td style = "text-align: right;">0.4</td><td style = "text-align: left;">setosa</td></tr></tbody></table></div><p>Now that we have training and test sets separated, we can build our model using the training set. This implies that the model has never seen the values in the test set. It should be noted that we always want the homogenous distribution of measurements in the test set. Also, each iteration here will result in a different test set as a new set of random numbers are generated.  Now let&#39;s build our model with only the <span>$X_{tr}$</span> following the same procedure as before. </p><pre><code class="language-julia hljs"> out = svd(X_tr)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">LinearAlgebra.SVD{Float64, Float64, Matrix{Float64}}
 U factor:
-135×4 Matrix{Float64}:
- -0.06506     0.133138    0.00247777   0.00353554
- -0.0613098   0.113888    0.0731112    0.0630303
- -0.059934    0.121159    0.00455064   0.0120504
- -0.0598086   0.108045    0.00744537  -0.0429496
- -0.0646523   0.134703   -0.0323884   -0.0357454
- -0.0712653   0.134367   -0.0716032   -0.0169444
- -0.0606891   0.119763   -0.0689388   -0.033295
- -0.0643742   0.124167    0.0065443   -0.0238826
- -0.0567558   0.102528    0.0190938   -0.0150401
- -0.0621063   0.114958    0.0692863   -0.0255138
+136×4 Matrix{Float64}:
+ -0.0607463   0.118956    0.0719161    0.0541621
+ -0.0593713   0.126311    0.00349215   0.0122633
+ -0.0592647   0.112871    0.00459825  -0.0417169
+ -0.0640409   0.140331   -0.0341656   -0.03009
+ -0.0601239   0.12487    -0.0694271   -0.0233164
+ -0.0637781   0.129552    0.00418524  -0.0229737
+ -0.0562392   0.107117    0.0169198   -0.0158535
+ -0.0615376   0.120065    0.065196    -0.0320007
+ -0.0682916   0.146233    0.00377222  -0.00423041
+ -0.0627028   0.121902   -0.0279097   -0.0845209
   ⋮                                   
- -0.102849   -0.0458498  -0.0594011    0.279984
- -0.0913432  -0.0685339  -0.0725487   -0.02123
- -0.106925   -0.0774221  -0.103642     0.0200475
- -0.105762   -0.0716046  -0.170963     0.11841
- -0.101336   -0.0564541  -0.0701485    0.233007
- -0.0940789  -0.0626231   0.0427973    0.143589
- -0.0991331  -0.0536724  -0.0475789    0.0701706
- -0.0999995  -0.0601129  -0.226771     0.00116117
- -0.0932447  -0.0552945  -0.100492    -0.102078
+ -0.103565   -0.0696606  -0.103271     0.160209
+ -0.102207   -0.0430529  -0.0476       0.286358
+ -0.0908133  -0.0667686  -0.0703038   -0.00701353
+ -0.1063     -0.0752892  -0.0989979    0.037908
+ -0.105136   -0.0693887  -0.161153     0.142021
+ -0.100719   -0.05398    -0.0595086    0.241751
+ -0.09352    -0.060536    0.0472735    0.140589
+ -0.0993997  -0.0578834  -0.21948      0.0335032
+ -0.0926863  -0.0531674  -0.100338    -0.0829015
 singular values:
 4-element Vector{Float64}:
- 91.01413993356265
- 17.123083643788487
-  3.2868266835163293
-  1.7587236946802938
+ 91.63268440329152
+ 16.723301924559706
+  3.375687304327711
+  1.7936156249864
 Vt factor:
 4×4 Matrix{Float64}:
- -0.75263   -0.381585  -0.510059   -0.166679
-  0.279547   0.547439  -0.709256   -0.345137
-  0.486908  -0.659083  -0.0385151  -0.57188
-  0.343981  -0.346862  -0.48509     0.725294</code></pre><pre><code class="language-julia hljs"> D = diagm(out.S) # The singular value matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">4×4 Matrix{Float64}:
- 91.0141   0.0     0.0      0.0
-  0.0     17.1231  0.0      0.0
-  0.0      0.0     3.28683  0.0
-  0.0      0.0     0.0      1.75872</code></pre><pre><code class="language-julia hljs"> U = out.U # Left singular matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">135×4 Matrix{Float64}:
- -0.06506     0.133138    0.00247777   0.00353554
- -0.0613098   0.113888    0.0731112    0.0630303
- -0.059934    0.121159    0.00455064   0.0120504
- -0.0598086   0.108045    0.00744537  -0.0429496
- -0.0646523   0.134703   -0.0323884   -0.0357454
- -0.0712653   0.134367   -0.0716032   -0.0169444
- -0.0606891   0.119763   -0.0689388   -0.033295
- -0.0643742   0.124167    0.0065443   -0.0238826
- -0.0567558   0.102528    0.0190938   -0.0150401
- -0.0621063   0.114958    0.0692863   -0.0255138
+ -0.750366  -0.378108  -0.51539    -0.1684
+  0.286367   0.548055  -0.706583   -0.344048
+  0.507586  -0.681429  -0.0682522  -0.522831
+  0.311932  -0.303849  -0.480057    0.761525</code></pre><pre><code class="language-julia hljs"> D = diagm(out.S) # The singular value matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">4×4 Matrix{Float64}:
+ 91.6327   0.0     0.0      0.0
+  0.0     16.7233  0.0      0.0
+  0.0      0.0     3.37569  0.0
+  0.0      0.0     0.0      1.79362</code></pre><pre><code class="language-julia hljs"> U = out.U # Left singular matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">136×4 Matrix{Float64}:
+ -0.0607463   0.118956    0.0719161    0.0541621
+ -0.0593713   0.126311    0.00349215   0.0122633
+ -0.0592647   0.112871    0.00459825  -0.0417169
+ -0.0640409   0.140331   -0.0341656   -0.03009
+ -0.0601239   0.12487    -0.0694271   -0.0233164
+ -0.0637781   0.129552    0.00418524  -0.0229737
+ -0.0562392   0.107117    0.0169198   -0.0158535
+ -0.0615376   0.120065    0.065196    -0.0320007
+ -0.0682916   0.146233    0.00377222  -0.00423041
+ -0.0627028   0.121902   -0.0279097   -0.0845209
   ⋮                                   
- -0.102849   -0.0458498  -0.0594011    0.279984
- -0.0913432  -0.0685339  -0.0725487   -0.02123
- -0.106925   -0.0774221  -0.103642     0.0200475
- -0.105762   -0.0716046  -0.170963     0.11841
- -0.101336   -0.0564541  -0.0701485    0.233007
- -0.0940789  -0.0626231   0.0427973    0.143589
- -0.0991331  -0.0536724  -0.0475789    0.0701706
- -0.0999995  -0.0601129  -0.226771     0.00116117
- -0.0932447  -0.0552945  -0.100492    -0.102078</code></pre><pre><code class="language-julia hljs"> V = transpose(out.Vt) # Right singular matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">4×4 transpose(::Matrix{Float64}) with eltype Float64:
- -0.75263    0.279547   0.486908    0.343981
- -0.381585   0.547439  -0.659083   -0.346862
- -0.510059  -0.709256  -0.0385151  -0.48509
- -0.166679  -0.345137  -0.57188     0.725294</code></pre><p>Let&#39;s plot our results for the first two <strong>SVs</strong>, as we did before. However, this time we will take the knowledge of the different species into account. </p><pre><code class="language-julia hljs"> var_exp = diag(D) ./ sum(D) # variance explained
+ -0.103565   -0.0696606  -0.103271     0.160209
+ -0.102207   -0.0430529  -0.0476       0.286358
+ -0.0908133  -0.0667686  -0.0703038   -0.00701353
+ -0.1063     -0.0752892  -0.0989979    0.037908
+ -0.105136   -0.0693887  -0.161153     0.142021
+ -0.100719   -0.05398    -0.0595086    0.241751
+ -0.09352    -0.060536    0.0472735    0.140589
+ -0.0993997  -0.0578834  -0.21948      0.0335032
+ -0.0926863  -0.0531674  -0.100338    -0.0829015</code></pre><pre><code class="language-julia hljs"> V = transpose(out.Vt) # Right singular matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">4×4 transpose(::Matrix{Float64}) with eltype Float64:
+ -0.750366   0.286367   0.507586    0.311932
+ -0.378108   0.548055  -0.681429   -0.303849
+ -0.51539   -0.706583  -0.0682522  -0.480057
+ -0.1684    -0.344048  -0.522831    0.761525</code></pre><p>Let&#39;s plot our results for the first two <strong>SVs</strong>, as we did before. However, this time we will take the knowledge of the different species into account. </p><pre><code class="language-julia hljs"> var_exp = diag(D) ./ sum(D) # variance explained
  Y_tr = data[ind_tr .== 1,&quot;Species&quot;]
  Y_ts = data[ind_tr .== 0,&quot;Species&quot;]
  scatter(U[:,1],U[:,2],label=[&quot;Setosa&quot; &quot;Versicolor&quot; &quot;Virginica&quot;], group = Y_tr)
  xlabel!(&quot;First Singular value (81%)&quot;)
- ylabel!(&quot;Second Singular value (14%)&quot;)</code></pre><img src="660ddd35.svg" alt="Example block output"/><p>As it can be seen, this model is very similar to our previous model based on the full dataset. Now we need to first define thresholds for each class based on the score values in the <span>$U1$</span> and <span>$U2$</span> space. This is typically more difficult to assess. However, for this case the main separating factor is the <span>$U2$</span> values (e.g. <span>$U2 \geq 0.05 = Setosa$</span>). </p><pre><code class="language-julia hljs"> scatter(U[:,1],U[:,2],label=[&quot;Setosa&quot; &quot;Versicolor&quot; &quot;Virginica&quot;], group = Y_tr)
+ ylabel!(&quot;Second Singular value (14%)&quot;)</code></pre><img src="0881cf3c.svg" alt="Example block output"/><p>As it can be seen, this model is very similar to our previous model based on the full dataset. Now we need to first define thresholds for each class based on the score values in the <span>$U1$</span> and <span>$U2$</span> space. This is typically more difficult to assess. However, for this case the main separating factor is the <span>$U2$</span> values (e.g. <span>$U2 \geq 0.05 = Setosa$</span>). </p><pre><code class="language-julia hljs">
+ scatter(U[:,1],U[:,2],label=[&quot;Setosa&quot; &quot;Versicolor&quot; &quot;Virginica&quot;], group = Y_tr)
  plot!([-0.15,0],[0.05,0.05],label=&quot;Setosa&quot;)
  plot!([-0.15,0],[-0.04,-0.04],label=&quot;Virginica&quot;)
  xlabel!(&quot;First Singular value (81%)&quot;)
- ylabel!(&quot;Second Singular value (14%)&quot;)</code></pre><img src="6bdc5782.svg" alt="Example block output"/><p>The next step is to calculate the score values for the measurements in the test set. This will enable us to estimate the class associated with each data point in the test set. To do this we need to do a little bit of linear algebra.</p><p class="math-container">\[X = UDV^{T}\\
+ ylabel!(&quot;Second Singular value (14%)&quot;)
+
+</code></pre><p>The next step is to calculate the score values for the measurements in the test set. This will enable us to estimate the class associated with each data point in the test set. To do this we need to do a little bit of linear algebra.</p><p class="math-container">\[X = UDV^{T}\\
 
 U_{test} = X \times (DV^{T})^{-1}
 \]</p><p>In practice:</p><pre><code class="language-julia hljs"> U_test = X_ts * pinv(D*transpose(V))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">15×4 Matrix{Float64}:
- -0.103478   -0.0632166   -0.0240517    0.0873403
- -0.0793334  -0.0607373   -0.12394     -0.0748002
- -0.0660864   0.115159    -0.0842763    0.0937724
- -0.116258   -0.0957192    0.0815699   -0.0595925
- -0.0713149  -0.00168426   0.0668336    0.0265074
- -0.0574532   0.116261    -0.0398912   -0.0466252
- -0.102862   -0.0825563   -0.089408    -0.0128413
- -0.094306   -0.00983791  -0.00729906  -0.00195828
- -0.071178   -0.0195597    0.124647     0.0305106
- -0.0876516  -0.0119686   -0.0377488    0.0224395
- -0.0851982  -0.0325578   -0.115334    -0.158099
- -0.0834774  -0.0120584    0.0821874    0.0132148
- -0.064962    0.104333    -0.0277708   -0.173327
- -0.121183   -0.0746677   -0.0826052   -0.184155
- -0.0546899   0.0871044    0.137994     0.191674</code></pre><pre><code class="language-julia hljs"> scatter(U[:,1],U[:,2],label=[&quot;Setosa&quot; &quot;Versicolor&quot; &quot;Virginica&quot;], group = Y_tr)
+ -0.0995028  -0.0805148  -0.0568448    0.0739421
+ -0.0794164  -0.0261942   0.0805016    0.0482424
+ -0.0597436   0.119301    0.0723677   -0.00568661
+ -0.0827204  -0.0312059   0.0273431   -0.152096
+ -0.0658606   0.113365   -0.0111       0.0852012
+ -0.102857   -0.0608284  -0.0195614    0.0939332
+ -0.103526   -0.0516137  -0.0226894    0.121149
+ -0.0901463  -0.0270526   0.0711239   -0.161924
+ -0.0985296  -0.0512328  -0.0431172    0.0795962
+ -0.0918242  -0.0339375  -0.134645    -0.0364884
+ -0.0706093   0.140223   -0.0716206   -0.00672606
+ -0.0644472   0.138767    0.00105726   0.00424177
+ -0.0706093   0.140223   -0.0716206   -0.00672606
+ -0.0658285   0.136254    0.0140719   -0.00513175
+ -0.0683595   0.157123   -0.0635331    0.100333</code></pre><pre><code class="language-julia hljs">
+ scatter(U[:,1],U[:,2],label=[&quot;Setosa&quot; &quot;Versicolor&quot; &quot;Virginica&quot;], group = Y_tr)
  plot!([-0.15,0],[0.05,0.05],label=&quot;Setosa&quot;)
  plot!([-0.15,0],[-0.04,-0.04],label=&quot;Virginica&quot;)
  scatter!(U_test[Y_ts[:] .== &quot;setosa&quot; ,1],U_test[Y_ts[:] .== &quot;setosa&quot;,2],label=&quot;Setosa&quot;,marker=:d)
  scatter!(U_test[Y_ts[:] .== &quot;versicolor&quot;,1],U_test[Y_ts[:] .== &quot;versicolor&quot;,2],label=&quot;Versicolor&quot;,marker=:d)
  scatter!(U_test[Y_ts[:] .== &quot;virginica&quot;,1],U_test[Y_ts[:] .== &quot;virginica&quot;,2],label=&quot;Virginica&quot;,marker=:d)
  xlabel!(&quot;First Singular value (81%)&quot;)
- ylabel!(&quot;Second Singular value (14%)&quot;)</code></pre><img src="5b8853ff.svg" alt="Example block output"/><p>As it can be seen from the results of the test set, our model is not prefect but it does well for most cases. It should be noted that steps such as data pre-treatment and the use of supervised methods may improve the results of your cluster analysis. The use of <strong>SVD</strong> for prediction is not recommended. It must be mainly used for the dimension reduction and data exploration.  </p><h3 id="Regression"><a class="docs-heading-anchor" href="#Regression">Regression</a><a id="Regression-1"></a><a class="docs-heading-anchor-permalink" href="#Regression" title="Permalink"></a></h3><p>If you have a dataset (e.g. octane dataset in the additional example), where the <strong>SVD</strong> is used to reduce the dimensions of the dataset. In this case the we can perform a least square regression using the selected columns of <span>$U$</span> rather than the original <span>$X$</span>. For example in case of <em>iris</em> dataset the <span>$U1$</span> and <span>$U2$</span> can be used to replace <span>$X$</span>.  </p><pre><code class="language-julia hljs"> X_svr = U[:,1:m] # m is the number of selected SVs 
+ ylabel!(&quot;Second Singular value (14%)&quot;)
+
+</code></pre><p>As it can be seen from the results of the test set, our model is not prefect but it does well for most cases. It should be noted that steps such as data pre-treatment and the use of supervised methods may improve the results of your cluster analysis. The use of <strong>SVD</strong> for prediction is not recommended. It must be mainly used for the dimension reduction and data exploration.  </p><h3 id="Regression"><a class="docs-heading-anchor" href="#Regression">Regression</a><a id="Regression-1"></a><a class="docs-heading-anchor-permalink" href="#Regression" title="Permalink"></a></h3><p>If you have a dataset (e.g. octane dataset in the additional example), where the <strong>SVD</strong> is used to reduce the dimensions of the dataset. In this case the we can perform a least square regression using the selected columns of <span>$U$</span> rather than the original <span>$X$</span>. For example in case of <em>iris</em> dataset the <span>$U1$</span> and <span>$U2$</span> can be used to replace <span>$X$</span>.  </p><pre><code class="language-julia hljs"> X_svr = U[:,1:m] # m is the number of selected SVs 
  Y_svr            # does not exist for iris dataset. for the octane dataset is the octane column
  b = pinv(transpose(X_svr) * X_svr) * transpose(X_svr) * Y_svr # simple least square solution
  y_hat = X_svr * b # prediction the y_hat </code></pre><h3 id="Trend-Analysis"><a class="docs-heading-anchor" href="#Trend-Analysis">Trend Analysis</a><a id="Trend-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Trend-Analysis" title="Permalink"></a></h3><p>We also can assess the trend represented by each <em>SV</em> in our model. This is typically done by setting all <em>SV</em> values except one to zero. Then the new <span>$D$</span> is used to predict <span>$\hat{X}$</span>. Then different variables are plotted against each other for both <span>$X$</span> matrices. </p><pre><code class="language-julia hljs"> D_temp = out.S
  D_temp[2:end] .= 0
  D_n = diagm(D_temp) # the new singular value matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">4×4 Matrix{Float64}:
- 91.0141  0.0  0.0  0.0
+ 91.6327  0.0  0.0  0.0
   0.0     0.0  0.0  0.0
   0.0     0.0  0.0  0.0
   0.0     0.0  0.0  0.0</code></pre><p>Then the <span>$\hat{X}$</span> is calculated.</p><pre><code class="language-julia hljs"> X_h  = U * D_n * transpose(V)
  X_h[1:5,:]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">5×4 Matrix{Float64}:
- 4.4566   2.25951  3.02025  0.98697
- 4.19972  2.12927  2.84616  0.930079
- 4.10548  2.08149  2.78229  0.909209
- 4.09689  2.07713  2.77647  0.907307
- 4.42868  2.24535  3.00132  0.980785</code></pre><p>Now if we plot the SepalLength vs SepalWidth we can clearly see a clear 1 to 2 relationship between the two variables which is being detected by the first <em>SV</em>. This can be done for other variables and <em>SVs</em>. </p><pre><code class="language-julia hljs"> scatter(X[:,1],X[:,2],label=&quot;X&quot;)
+ 4.17679  2.10468  2.86884  0.937374
+ 4.08225  2.05704  2.8039   0.916158
+ 4.07492  2.05335  2.79887  0.914512
+ 4.40333  2.21883  3.02443  0.988215
+ 4.134    2.08312  2.83945  0.927771</code></pre><p>Now if we plot the SepalLength vs SepalWidth we can clearly see a clear 1 to 2 relationship between the two variables which is being detected by the first <em>SV</em>. This can be done for other variables and <em>SVs</em>. </p><pre><code class="language-julia hljs"> scatter(X[:,1],X[:,2],label=&quot;X&quot;)
  scatter!(X_h[:,1],X_h[:,2],label=&quot;X_h&quot;)
  xlabel!(&quot;SepalLength&quot;)
- ylabel!(&quot;SepalWidth&quot;)</code></pre><img src="dab7a981.svg" alt="Example block output"/><h2 id="Additional-Example"><a class="docs-heading-anchor" href="#Additional-Example">Additional Example</a><a id="Additional-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Additional-Example" title="Permalink"></a></h2><p>If you are interested in practicing more, you can use the <a href="https://github.com/EMCMS/AdvChemStat.jl/blob/main/datasets/NIR.csv">NIR.csv</a> file provided in the <a href="https://github.com/EMCMS/AdvChemStat.jl/tree/main/datasets">folder dataset</a> of the package <a href="https://github.com/EMCMS/AdvChemStat.jl"><em>AdvChemStat.jl</em> github repository</a>. Please note that this is an <em>SVR</em> problem, where you can first use <strong>SVD</strong> for the dimension reduction and then use the selected <em>SVs</em> for the regression. </p><p>If you are interested in math behind <strong>SVD</strong> and would like to know more you can check this <a href="https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/resources/lecture-6-singular-value-decomposition-svd/">MIT course material</a>.  </p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../HCA/">HCA »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Friday 26 January 2024 18:18">Friday 26 January 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+ ylabel!(&quot;SepalWidth&quot;)</code></pre><img src="000979b1.svg" alt="Example block output"/><h2 id="Additional-Example"><a class="docs-heading-anchor" href="#Additional-Example">Additional Example</a><a id="Additional-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Additional-Example" title="Permalink"></a></h2><p>If you are interested in practicing more, you can use the <a href="https://github.com/EMCMS/AdvChemStat.jl/blob/main/datasets/NIR.csv">NIR.csv</a> file provided in the <a href="https://github.com/EMCMS/AdvChemStat.jl/tree/main/datasets">folder dataset</a> of the package <a href="https://github.com/EMCMS/AdvChemStat.jl"><em>AdvChemStat.jl</em> github repository</a>. Please note that this is an <em>SVR</em> problem, where you can first use <strong>SVD</strong> for the dimension reduction and then use the selected <em>SVs</em> for the regression. </p><p>If you are interested in math behind <strong>SVD</strong> and would like to know more you can check this <a href="https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/resources/lecture-6-singular-value-decomposition-svd/">MIT course material</a>.  </p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../HCA/">HCA »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Friday 26 January 2024 19:33">Friday 26 January 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
